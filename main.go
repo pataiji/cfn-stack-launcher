@@ -18,7 +18,7 @@ func getApp() *cli.App {
 	app := cli.NewApp()
 	app.Name = "cfn-stack-launcher"
 	app.HelpName = "cfn-stack-launcher"
-	app.Version = "0.0.1"
+	app.Version = "0.0.2"
 	app.Usage = "Command Line Tools for CloudFormation Stacks"
 	app.EnableBashCompletion = true
 	app.Commands = []cli.Command{
