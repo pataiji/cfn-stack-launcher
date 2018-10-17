@@ -138,13 +138,23 @@ func (l *StackLauncher) createChangeSetAndWaitForComplete(config *Config) (*stri
 }
 
 func (l *StackLauncher) createChangeSet(config *Config) (*string, error) {
+	isStackExist, err := l.isStackExist(config.StackName)
+	if err != nil {
+		return nil, err
+	}
+
+	changeSetType := "CREATE"
+	if *isStackExist {
+		changeSetType = "UPDATE"
+	}
+
 	res, err := l.Client.CreateChangeSet(&cloudformation.CreateChangeSetInput{
 		Capabilities: []*string{
 			aws.String("CAPABILITY_IAM"),
 			aws.String("CAPABILITY_NAMED_IAM"),
 		},
 		ChangeSetName: aws.String(*getUniqeChangeSetName()),
-		ChangeSetType: aws.String("CREATE"),
+		ChangeSetType: aws.String(changeSetType),
 		Parameters:    buildParameters(config),
 		StackName:     aws.String(*config.StackName),
 		TemplateURL:   aws.String(*config.TemplateUrl),
